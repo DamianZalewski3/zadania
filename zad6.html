@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>pompa</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{
+      font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background:linear-gradient(180deg,#f5f7fb,#eef3ff);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:40px;
+      color:#0f172a;
+    }
+    .nav-wrapper{
+      width:100%;
+      max-width:900px;
+      background:rgba(255,255,255,0.8);
+      border-radius:14px;
+      box-shadow:0 6px 20px rgba(17,24,39,0.08);
+      padding:12px 18px;
+      backdrop-filter: blur(6px);
+    }
+    nav ul{
+      list-style:none;
+      display:flex;
+      gap:8px;
+      align-items:center;
+      justify-content:center; 
+    }
+    nav li{
+    }
+    nav a{
+      display:inline-block;
+      padding:10px 18px;
+      border-radius:10px;
+      text-decoration:none;
+      font-weight:600;
+      text-align:center; 
+      transition:all 180ms ease;
+      color:#0f172a;
+    }
+    nav a:hover,
+    nav a:focus{
+      transform:translateY(-2px);
+    }
+    nav a:hover{
+      background:linear-gradient(90deg,#eef2ff,#e6f0ff);
+      box-shadow:0 6px 14px rgba(99,102,241,0.12);
+      color:#0b1220;
+    }
+    nav a.active{
+      background:#6366f1; 
+      color:white;
+      box-shadow:0 6px 18px rgba(99,102,241,0.16);
+    }
+    nav a:focus{
+      outline:3px solid rgba(99,102,241,0.18);
+      outline-offset:4px;
+    }
+    @media (max-width:520px){
+      nav ul{flex-direction:column;gap:10px}
+      .nav-wrapper{padding:14px}
+    }
+  </style>
+</head>
+<body>
+  <div class="nav-wrapper" role="navigation" aria-label="Główne menu">
+    <nav>
+      <ul>
+        <li><a href="#home" class="active">Home</a></li>
+        <li><a href="#about">O nas</a></li>
+        <li><a href="#services">Usługi</a></li>
+        <li><a href="#contact">Kontakt</a></li>
+      </ul>
+    </nav>
+  </div>
+</body>
+</html>

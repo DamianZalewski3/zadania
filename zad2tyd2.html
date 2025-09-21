@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <title>Formularzyk</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    form { display: flex; flex-direction: column; gap: 10px; max-width: 300px; }
+    label { display: flex; flex-direction: column; font-size: 14px; }
+    input { padding: 6px; font-size: 14px; }
+    button { padding: 8px; background: #2563eb; border: none; color: white; border-radius: 6px; cursor: pointer; }
+    #output { margin-top: 20px; padding: 10px; border: 1px solid #ddd; border-radius: 6px; background: #f9fafb; }
+  </style>
+</head>
+<body>
+  <h1>dane nazara skryminskiego</h1>
+
+  <form id="userForm">
+    <label>
+      Imię:
+      <input type="text" id="name" required />
+    </label>
+    <label>
+      Email:
+      <input type="email" id="email" required />
+    </label>
+    <label>
+      Wiek:
+      <input type="number" id="age" min="1" required />
+    </label>
+    <button type="submit">Wyświetl dane</button>
+  </form>
+
+  <div id="output"></div>
+
+  <script>
+    const form = document.getElementById('userForm');
+    const output = document.getElementById('output');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault(); 
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const age = document.getElementById('age').value;
+
+      output.innerHTML = `
+        <h2>Dane użytkownika:</h2>
+        <p><strong>Imię:</strong> ${name}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Wiek:</strong> ${age}</p>
+      `;
+    });
+  </script>
+</body>
+</html>

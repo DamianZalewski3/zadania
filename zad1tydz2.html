@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>potezne kola</title>
+  <style>
+    body{font-family:system-ui,Arial;margin:20px;background:#f6f7fb;color:#111}
+    .controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+    label{font-size:14px}
+    input[type=number]{width:90px}
+    canvas{background:white;border:1px solid #d6d9e6;border-radius:8px;display:block}
+    .btn{padding:8px 12px;border-radius:8px;border:0;background:#2563eb;color:white;cursor:pointer}
+    .btn.secondary{background:#6b7280}
+    .row{display:flex;gap:8px;align-items:center}
+    .small{font-size:13px;color:#6b7280}
+  </style>
+</head>
+<body>
+ 
+  <div class="controls">
+    <div class="row">
+      <label for="size">Średnica (px):&nbsp;</label>
+      <input id="size" type="number" min="4" value="80" />
+    </div>
+
+    <div class="row">
+      <label for="c1">Kolor startowy:&nbsp;</label>
+      <input id="c1" type="color" value="#ff6b6b" />
+    </div>
+
+    <div class="row">
+      <label for="c2">Kolor końcowy:&nbsp;</label>
+      <input id="c2" type="color" value="#5eead4" />
+    </div>
+
+    <button id="add" class="btn">Dodaj kółko</button>
+    <button id="clear" class="btn secondary">Wyczyść</button>
+  </div>
+
+  <canvas id="stage" width="900" height="500"></canvas>
+
+  <script>
+    const canvas = document.getElementById('stage');
+    const ctx = canvas.getContext('2d');
+
+    function resizeForDPR() {
+      const dpr = window.devicePixelRatio || 1;
+      const width = canvas.clientWidth || canvas.width;
+      const height = canvas.clientHeight || canvas.height;
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+      canvas.style.width = width + 'px';
+      canvas.style.height = height + 'px';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      redraw();
+    }
+
+    const circles = [];
+
+    function drawCircle(cx, cy, r, color1, color2, angleDeg = 45) {
+      const angle = (angleDeg % 360) * Math.PI / 180;
+      const half = r;
+      const x0 = cx - half;
+      const y0 = cy - half;
+      const x1 = cx + half;
+      const y1 = cy + half;
+
+      const gx = Math.cos(angle);
+      const gy = Math.sin(angle);
+      const length = Math.sqrt((x1 - x0) ** 2 + (y1 - y0) ** 2);
+
+      const gx0 = cx - gx * length / 2;
+      const gy0 = cy - gy * length / 2;
+      const gx1 = cx + gx * length / 2;
+      const gy1 = cy + gy * length / 2;
+
+      const grad = ctx.createLinearGradient(gx0, gy0, gx1, gy1);
+      grad.addColorStop(0, color1);
+      grad.addColorStop(1, color2);
+
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, 0, Math.PI * 2);
+      ctx.closePath();
+      ctx.fillStyle = grad;
+      ctx.fill();
+    }
+
+    function redraw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (const c of circles) {
+        drawCircle(c.x, c.y, c.r, c.c1, c.c2, c.angle);
+      }
+    }
+
+    document.getElementById('add').addEventListener('click', () => {
+      const size = Number(document.getElementById('size').value) || 50;
+      const c1 = document.getElementById('c1').value;
+      const c2 = document.getElementById('c2').value;
+      const padding = Math.ceil(size / 2) + 4;
+      const x = Math.random() * (canvas.clientWidth - padding * 2) + padding;
+      const y = Math.random() * (canvas.clientHeight - padding * 2) + padding;
+      circles.push({ x, y, r: size / 2, c1, c2, angle: Math.random() * 360 });
+      redraw();
+    });
+
+    document.getElementById('clear').addEventListener('click', () => {
+      circles.length = 0;
+      redraw();
+    });
+
+    canvas.addEventListener('click', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const cx = e.clientX - rect.left;
+      const cy = e.clientY - rect.top;
+      const size = Number(document.getElementById('size').value) || 50;
+      const c1 = document.getElementById('c1').value;
+      const c2 = document.getElementById('c2').value;
+      circles.push({ x: cx, y: cy, r: size / 2, c1, c2, angle: Math.random() * 360 });
+      redraw();
+    });
+
+    function fitCanvasToParent() {
+      const maxWidth = Math.min(window.innerWidth - 40, 1100);
+      canvas.style.width = maxWidth + 'px';
+      canvas.style.height = '520px';
+      resizeForDPR();
+    }
+
+    window.addEventListener('resize', fitCanvasToParent);
+    fitCanvasToParent();
+  </script>
+</body>
+</html>
